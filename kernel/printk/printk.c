@@ -46,7 +46,7 @@
 #include <linux/ctype.h>
 #include <linux/uio.h>
 
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 #include <asm/sections.h>
 
 #include "../printk_interface.h"
