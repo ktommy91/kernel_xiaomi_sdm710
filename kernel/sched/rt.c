@@ -1717,19 +1717,6 @@ static struct task_struct *pick_highest_pushable_task(struct rq *rq, int cpu)
 	return NULL;
 }
 
-#ifdef CONFIG_SCHED_CORE_ROTATE
-static int rotate_cpu_start;
-static DEFINE_SPINLOCK(rotate_lock);
-static unsigned long avoid_prev_cpu_last;
-
-static struct find_first_cpu_bit_env first_cpu_bit_env = {
-	.avoid_prev_cpu_last = &avoid_prev_cpu_last,
-	.rotate_cpu_start = &rotate_cpu_start,
-	.interval = HZ,
-	.rotate_lock = &rotate_lock,
-};
-#endif
-
 static DEFINE_PER_CPU(cpumask_var_t, local_cpu_mask);
 
 static int find_lowest_rq(struct task_struct *task)
@@ -1738,7 +1725,7 @@ static int find_lowest_rq(struct task_struct *task)
 	struct sched_group *sg, *sg_target;
 	struct cpumask *lowest_mask = this_cpu_cpumask_var_ptr(local_cpu_mask);
 	int this_cpu = smp_processor_id();
-	int cpu = -1, best_cpu;
+	int cpu, best_cpu;
 	struct cpumask search_cpu, backup_search_cpu;
 	unsigned long cpu_capacity;
 	unsigned long best_capacity;
@@ -1751,8 +1738,6 @@ static int find_lowest_rq(struct task_struct *task)
 	enum sched_boost_policy placement_boost;
 	int prev_cpu = task_cpu(task);
 	int start_cpu = walt_start_cpu(prev_cpu);
-	bool do_rotate = false;
-	bool avoid_prev_cpu = false;
 
 	/* Make sure the mask is initialized first */
 	if (unlikely(!lowest_mask))
@@ -1779,10 +1764,6 @@ static int find_lowest_rq(struct task_struct *task)
 
 		sg = sd->groups;
 		do {
-			if (!cpumask_intersects(lowest_mask,
-						sched_group_cpus(sg)))
-				continue;
-
 			if (!sysctl_sched_is_big_little) {
 				sg_target = sg;
 				break;
@@ -1804,34 +1785,19 @@ static int find_lowest_rq(struct task_struct *task)
 			}
 		} while (sg = sg->next, sg != sd->groups);
 
-		if (sg_target) {
-			cpumask_and(&search_cpu, lowest_mask,
-				    sched_group_cpus(sg_target));
-			cpumask_copy(&backup_search_cpu, lowest_mask);
-			cpumask_andnot(&backup_search_cpu, &backup_search_cpu,
-				       &search_cpu);
-
-			cpu = find_first_cpu_bit(task, &search_cpu, sg_target,
-						 &avoid_prev_cpu, &do_rotate,
-						 &first_cpu_bit_env);
-		} else {
-			cpumask_copy(&search_cpu, lowest_mask);
-			cpumask_clear(&backup_search_cpu);
-			cpu = -1;
-		}
+		cpumask_and(&search_cpu, lowest_mask,
+			    sched_group_cpus(sg_target));
+		cpumask_copy(&backup_search_cpu, lowest_mask);
+		cpumask_andnot(&backup_search_cpu, &backup_search_cpu,
+			       &search_cpu);
 
 retry:
-		while ((cpu = cpumask_next(cpu, &search_cpu)) < nr_cpu_ids) {
-			cpumask_clear_cpu(cpu, &search_cpu);
-
+		for_each_cpu(cpu, &search_cpu) {
 			/*
 			 * Don't use capcity_curr_of() since it will
 			 * double count rt task load.
 			 */
 			util = cpu_util(cpu);
-
-			if (avoid_prev_cpu && cpu == prev_cpu)
-				continue;
 
 			if (__cpu_overutilized(cpu, tutil))
 				continue;
@@ -1879,23 +1845,11 @@ retry:
 			best_cpu = cpu;
 		}
 
-		if (do_rotate) {
-			/*
-			 * We started iteration somewhere in the middle of
-			 * cpumask.  Iterate once again from bit 0 to the
-			 * previous starting point bit.
-			 */
-			do_rotate = false;
-			cpu = -1;
-			goto retry;
-		}
-
 		if (best_cpu != -1 && placement_boost != SCHED_BOOST_ON_ALL) {
 			return best_cpu;
 		} else if (!cpumask_empty(&backup_search_cpu)) {
 			cpumask_copy(&search_cpu, &backup_search_cpu);
 			cpumask_clear(&backup_search_cpu);
-			cpu = -1;
 			placement_boost = SCHED_BOOST_NONE;
 			goto retry;
 		}
