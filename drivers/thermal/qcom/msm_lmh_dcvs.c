@@ -41,6 +41,8 @@
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/lmh.h>
+#undef CREATE_TRACE_POINTS
+#include <trace/events/power.h>
 
 #define LIMITS_DCVSH                0x10
 #define LIMITS_PROFILE_CHANGE       0x01
@@ -180,7 +182,10 @@ static unsigned long limits_mitigation_notify(struct limits_dcvs_hw *hw)
 	sched_update_cpu_freq_min_max(&hw->core_map, 0, max_limit);
 	pr_debug("CPU:%d max limit:%lu\n", cpumask_first(&hw->core_map),
 			max_limit);
-	//trace_lmh_dcvs_freq(cpumask_first(&hw->core_map), max_limit);
+//	trace_lmh_dcvs_freq(cpumask_first(&hw->core_map), max_limit);
+//	trace_clock_set_rate(hw->sensor_name,
+//			max_limit,
+//			cpumask_first(&hw->core_map));
 
 notify_exit:
 	hw->hw_freq_limit = max_limit;
