@@ -2771,6 +2771,14 @@ static inline unsigned int power_cost(int cpu, bool max)
 		return sge->cap_states[0].power;
 }
 
+static inline bool task_boost_on_big_eligible(struct task_struct *p)
+{
+	bool boost_on_big = task_sched_boost(p) &&
+				sched_boost_policy() == SCHED_BOOST_ON_BIG;
+
+	return boost_on_big;
+}
+
 extern void walt_sched_energy_populated_callback(void);
 
 #else	/* CONFIG_SCHED_WALT */
@@ -2782,6 +2790,11 @@ struct sched_cluster;
 static inline bool task_sched_boost(struct task_struct *p)
 {
 	return true;
+}
+
+static inline bool task_boost_on_big_eligible(struct task_struct *p)
+{
+	return false;
 }
 
 static inline void check_for_migration(struct rq *rq, struct task_struct *p) { }
