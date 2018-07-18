@@ -2771,12 +2771,20 @@ static inline unsigned int power_cost(int cpu, bool max)
 		return sge->cap_states[0].power;
 }
 
-static inline bool task_boost_on_big_eligible(struct task_struct *p)
+static inline bool task_placement_boost_enabled(struct task_struct *p)
 {
-	bool boost_on_big = task_sched_boost(p) &&
-				sched_boost_policy() == SCHED_BOOST_ON_BIG;
+	if (task_sched_boost(p))
+		return sched_boost_policy() != SCHED_BOOST_NONE;
 
-	if (boost_on_big) {
+	return false;
+}
+
+static inline enum sched_boost_policy task_boost_policy(struct task_struct *p)
+{
+	enum sched_boost_policy policy = task_sched_boost(p) ?
+							sched_boost_policy() :
+							SCHED_BOOST_NONE;
+	if (policy == SCHED_BOOST_ON_BIG) {
 		/*
 		 * Filter out tasks less than min task util threshold
 		 * under conservative boost.
@@ -2784,10 +2792,10 @@ static inline bool task_boost_on_big_eligible(struct task_struct *p)
 		if (sysctl_sched_boost == CONSERVATIVE_BOOST &&
 				task_util(p) <=
 				sysctl_sched_min_task_util_for_boost_colocation)
-			boost_on_big = false;
+			policy = SCHED_BOOST_NONE;
 	}
 
-	return boost_on_big;
+	return policy;
 }
 
 extern void walt_sched_energy_populated_callback(void);
@@ -2803,16 +2811,16 @@ static inline bool task_sched_boost(struct task_struct *p)
 	return true;
 }
 
-static inline bool task_boost_on_big_eligible(struct task_struct *p)
-{
-	return false;
-}
-
 static inline void check_for_migration(struct rq *rq, struct task_struct *p) { }
 
 static inline int sched_boost(void)
 {
 	return 0;
+}
+
+static inline enum sched_boost_policy task_boost_policy(struct task_struct *p)
+{
+	return SCHED_BOOST_NONE;
 }
 
 static inline bool hmp_capable(void) { return false; }

@@ -6205,7 +6205,8 @@ static inline bool task_fits_max(struct task_struct *p, int cpu)
 	if (capacity == max_capacity)
 		return true;
 
-	if (task_boost_on_big_eligible(p) && is_min_capacity_cpu(cpu))
+	if (task_boost_policy(p) == SCHED_BOOST_ON_BIG
+			&& is_min_capacity_cpu(cpu))
 		return false;
 
 	return __task_fits(p, cpu, 0);
@@ -6870,8 +6871,8 @@ static int cpu_util_wake(int cpu, struct task_struct *p)
 
 struct find_best_target_env {
 	struct cpumask *rtg_target;
+	int placement_boost;
 	bool need_idle;
-	bool placement_boost;
 	int fastpath;
 };
 
@@ -6903,7 +6904,7 @@ static bool is_packing_eligible(struct task_struct *p, int target_cpu,
 {
 	unsigned long estimated_capacity;
 
-	if (fbt_env->placement_boost || fbt_env->need_idle)
+	if (task_placement_boost_enabled(p) || fbt_env->need_idle)
 		return false;
 
 	if (best_idle_cstate == -1)
@@ -7267,14 +7268,14 @@ static inline int find_best_target(struct task_struct *p, int *backup_cpu,
 		/*
 		 * For placement boost (or otherwise), we start with group
 		 * where the task should be placed. When
-		 * placement boost is active, and we are not at the highest
+		 * boost is active, and we are not at the highest
 		 * capacity group reset the target_capacity to keep
 		 * traversing to other higher clusters.
 		 * If we already are at the highest capacity cluster we skip
 		 * going around to the lower capacity cluster if we've found
 		 * a cpu.
 		 */
-		if (fbt_env->placement_boost) {
+		if (fbt_env->placement_boost == SCHED_BOOST_ON_BIG) {
 			if (capacity_orig_of(group_first_cpu(sg)) <
 				capacity_orig_of(group_first_cpu(sg->next)))
 				target_capacity = ULONG_MAX;
@@ -7462,6 +7463,7 @@ static int select_energy_cpu_brute(struct task_struct *p, int prev_cpu,
 	int next_cpu = -1;
 	struct cpumask *rtg_target = find_rtg_target(p);
 	struct find_best_target_env fbt_env;
+	int placement_boost = task_boost_policy(p);
 	u64 start_t = 0;
 
 	fbt_env.fastpath = 0;
@@ -7487,9 +7489,7 @@ static int select_energy_cpu_brute(struct task_struct *p, int prev_cpu,
 	} else {
 		fbt_env.need_idle = wake_to_idle(p);
 	}
-	fbt_env.placement_boost = task_sched_boost(p) ?
-				  sched_boost_policy() != SCHED_BOOST_NONE :
-				  false;
+	fbt_env.placement_boost = placement_boost;
 
 	sd = rcu_dereference(per_cpu(sd_ea, prev_cpu));
 	if (!sd) {
@@ -7507,7 +7507,7 @@ static int select_energy_cpu_brute(struct task_struct *p, int prev_cpu,
 		goto unlock;
 	}
 
-	if (fbt_env.placement_boost || fbt_env.need_idle ||
+	if (task_placement_boost_enabled(p) || fbt_env.need_idle ||
 		(rtg_target && (!cpumask_test_cpu(prev_cpu, rtg_target) ||
 			cpumask_test_cpu(next_cpu, rtg_target)))) {
 		target_cpu = next_cpu;
@@ -7578,7 +7578,7 @@ unlock:
 	rcu_read_unlock();
 	trace_sched_task_util(p, next_cpu, backup_cpu, target_cpu,
 			      fbt_env.need_idle, fbt_env.fastpath,
-			      fbt_env.placement_boost, rtg_target ?
+			      placement_boost, rtg_target ?
 			      cpumask_first(rtg_target) : -1, start_t);
 	return target_cpu;
 }
