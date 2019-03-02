@@ -3093,8 +3093,8 @@ static const char *fts_get_config(struct fts_ts_info *info)
 	ret |= fts_enableInterrupt();
 
 	for (i = 0; i < pdata->config_array_size; i++) {
-		if ((info->lockdown_info[0] ==
-		     pdata->config_array[i].tp_vendor))
+		if (info->lockdown_info[0] ==
+		     pdata->config_array[i].tp_vendor)
 			break;
 	}
 
@@ -3133,8 +3133,8 @@ static const char *fts_get_limit(struct fts_ts_info *info)
 	ret |= fts_enableInterrupt();
 
 	for (i = 0; i < pdata->config_array_size; i++) {
-		if ((info->lockdown_info[0] ==
-		     pdata->config_array[i].tp_vendor))
+		if (info->lockdown_info[0] ==
+		     pdata->config_array[i].tp_vendor)
 			break;
 	}
 
@@ -3256,7 +3256,7 @@ int fts_fw_update(struct fts_ts_info *info, const char *fw_name, int force)
 			 tag, __func__, ret);
 	}
 
-	if ((init_type == NO_INIT)) {
+	if (init_type == NO_INIT) {
 #ifdef PRE_SAVED_METHOD
 		if (systemInfo.u8_cfgAfeVer != systemInfo.u8_cxAfeVer) {
 			init_type = SPECIAL_FULL_PANEL_INIT;
