@@ -7685,19 +7685,17 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
 
 	if (sd_flag & SD_BALANCE_WAKE) {
 		int _wake_cap = wake_cap(p, cpu, prev_cpu);
+		int _cpus_allowed = cpumask_test_cpu(cpu, tsk_cpus_allowed(p));
 
-		if (cpumask_test_cpu(cpu, tsk_cpus_allowed(p))) {
-			bool about_to_idle = (cpu_rq(cpu)->nr_running < 2);
-
-			if (sysctl_sched_sync_hint_enable && sync &&
-			    !_wake_cap && about_to_idle &&
-			    cpu_is_in_target_set(p, cpu))
-				return cpu;
+		if (sysctl_sched_sync_hint_enable && sync &&
+				_cpus_allowed && !_wake_cap &&
+				(cpu_rq(cpu)->nr_running < 2) &&
+				cpu_is_in_target_set(p, cpu)) {
+			return cpu;
 		}
 
 		record_wakee(p);
-		want_affine = (!wake_wide(p) && !_wake_cap &&
-			cpumask_test_cpu(cpu, tsk_cpus_allowed(p)));
+		want_affine = (!wake_wide(p) && !_wake_cap && _cpus_allowed);
 	}
 
 	if (energy_aware() && !(cpu_rq(prev_cpu)->rd->overutilized)) {
