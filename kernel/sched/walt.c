@@ -332,14 +332,19 @@ update_window_start(struct rq *rq, u64 wallclock, int event)
 
 int register_cpu_cycle_counter_cb(struct cpu_cycle_counter_cb *cb)
 {
+	unsigned long flags;
+
 	mutex_lock(&cluster_lock);
 	if (!cb->get_cpu_cycle_counter) {
 		mutex_unlock(&cluster_lock);
 		return -EINVAL;
 	}
 
+	acquire_rq_locks_irqsave(cpu_possible_mask, &flags);
 	cpu_cycle_counter_cb = *cb;
 	use_cycle_counter = true;
+	release_rq_locks_irqrestore(cpu_possible_mask, &flags);
+
 	mutex_unlock(&cluster_lock);
 
 
