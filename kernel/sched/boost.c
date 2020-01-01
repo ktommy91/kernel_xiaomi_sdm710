@@ -231,7 +231,7 @@ static void _sched_set_boost(int type)
 	sched_boost_type = sched_effective_boost();
 	sysctl_sched_boost = sched_boost_type;
 	set_boost_policy(sysctl_sched_boost);
-	trace_sched_set_boost(sysctl_sched_boost);
+	//trace_sched_set_boost(sysctl_sched_boost);
 }
 
 void sched_boost_parse_dt(void)
