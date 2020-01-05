@@ -162,7 +162,7 @@ static void delayed_put_task_struct(struct rcu_head *rhp)
 	struct task_struct *tsk = container_of(rhp, struct task_struct, rcu);
 
 	perf_event_delayed_put(tsk);
-	trace_sched_process_free(tsk);
+	//trace_sched_process_free(tsk);
 	put_task_struct(tsk);
 }
 
@@ -844,7 +844,7 @@ void __noreturn do_exit(long code)
 
 	if (group_dead)
 		acct_process();
-	trace_sched_process_exit(tsk);
+	//trace_sched_process_exit(tsk);
 
 	exit_sem(tsk);
 	exit_shm(tsk);
