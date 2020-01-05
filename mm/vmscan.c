@@ -378,9 +378,9 @@ static unsigned long do_shrink_slab(struct shrink_control *shrinkctl,
 	if (total_scan > freeable * 2)
 		total_scan = freeable * 2;
 
-	trace_mm_shrink_slab_start(shrinker, shrinkctl, nr,
-				   nr_scanned, nr_eligible,
-				   freeable, delta, total_scan);
+	//trace_mm_shrink_slab_start(shrinker, shrinkctl, nr,
+	//			   nr_scanned, nr_eligible,
+	//			   freeable, delta, total_scan);
 
 	/*
 	 * Normally, we should not scan less than batch_size objects in one
@@ -430,7 +430,7 @@ static unsigned long do_shrink_slab(struct shrink_control *shrinkctl,
 	else
 		new_nr = atomic_long_read(&shrinker->nr_deferred[nid]);
 
-	trace_mm_shrink_slab_end(shrinker, nid, freed, nr, new_nr, total_scan);
+	//trace_mm_shrink_slab_end(shrinker, nid, freed, nr, new_nr, total_scan);
 	return freed;
 }
 
@@ -659,7 +659,7 @@ static pageout_t pageout(struct page *page, struct address_space *mapping,
 			/* synchronous write or broken a_ops? */
 			ClearPageReclaim(page);
 		}
-		trace_mm_vmscan_writepage(page);
+		//trace_mm_vmscan_writepage(page);
 		inc_node_page_state(page, NR_VMSCAN_WRITE);
 		return PAGE_SUCCESS;
 	}
@@ -1596,9 +1596,9 @@ static unsigned long isolate_lru_pages(unsigned long nr_to_scan,
 		}
 	}
 	*nr_scanned = total_scan;
-	trace_mm_vmscan_lru_isolate(sc->reclaim_idx, sc->order, nr_to_scan,
-					total_scan, skipped, nr_taken, mode,
-					is_file_lru(lru));
+	//trace_mm_vmscan_lru_isolate(sc->reclaim_idx, sc->order, nr_to_scan,
+	//				total_scan, skipped, nr_taken, mode,
+	//				is_file_lru(lru));
 	update_lru_sizes(lruvec, lru, nr_zone_taken);
 	return nr_taken;
 }
@@ -1958,9 +1958,9 @@ shrink_inactive_list(unsigned long nr_to_scan, struct lruvec *lruvec,
 	    current_may_throttle())
 		wait_iff_congested(pgdat, BLK_RW_ASYNC, HZ/10);
 
-	trace_mm_vmscan_lru_shrink_inactive(pgdat->node_id,
-			nr_scanned, nr_reclaimed,
-			sc->priority, file);
+	//trace_mm_vmscan_lru_shrink_inactive(pgdat->node_id,
+	//		nr_scanned, nr_reclaimed,
+	//		sc->priority, file);
 	return nr_reclaimed;
 }
 
@@ -3050,14 +3050,14 @@ unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
 		return 1;
 
 	mm_event_start(&event_ts);
-	trace_mm_vmscan_direct_reclaim_begin(order,
-				sc.may_writepage,
-				sc.gfp_mask,
-				sc.reclaim_idx);
+	//trace_mm_vmscan_direct_reclaim_begin(order,
+	//			sc.may_writepage,
+	//			sc.gfp_mask,
+	//			sc.reclaim_idx);
 
 	nr_reclaimed = do_try_to_free_pages(zonelist, &sc);
 
-	trace_mm_vmscan_direct_reclaim_end(nr_reclaimed);
+	//trace_mm_vmscan_direct_reclaim_end(nr_reclaimed);
 	mm_event_end(MM_RECLAIM, event_ts);
 
 	return nr_reclaimed;
@@ -3083,10 +3083,10 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
 	sc.gfp_mask = (gfp_mask & GFP_RECLAIM_MASK) |
 			(GFP_HIGHUSER_MOVABLE & ~GFP_RECLAIM_MASK);
 
-	trace_mm_vmscan_memcg_softlimit_reclaim_begin(sc.order,
-						      sc.may_writepage,
-						      sc.gfp_mask,
-						      sc.reclaim_idx);
+	//trace_mm_vmscan_memcg_softlimit_reclaim_begin(sc.order,
+	//					      sc.may_writepage,
+	//					      sc.gfp_mask,
+	//					      sc.reclaim_idx);
 
 	/*
 	 * NOTE: Although we can get the priority field, using it
@@ -3097,7 +3097,7 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
 	 */
 	shrink_node_memcg(pgdat, memcg, &sc, &lru_pages);
 
-	trace_mm_vmscan_memcg_softlimit_reclaim_end(sc.nr_reclaimed);
+	//trace_mm_vmscan_memcg_softlimit_reclaim_end(sc.nr_reclaimed);
 
 	*nr_scanned = sc.nr_scanned;
 	return sc.nr_reclaimed;
@@ -3133,10 +3133,10 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
 
 	zonelist = &NODE_DATA(nid)->node_zonelists[ZONELIST_FALLBACK];
 
-	trace_mm_vmscan_memcg_reclaim_begin(0,
-					    sc.may_writepage,
-					    sc.gfp_mask,
-					    sc.reclaim_idx);
+	//trace_mm_vmscan_memcg_reclaim_begin(0,
+	//				    sc.may_writepage,
+	//				    sc.gfp_mask,
+	//				    sc.reclaim_idx);
 
 	psi_memstall_enter(&pflags);
 	current->flags |= PF_MEMALLOC;
@@ -3146,7 +3146,7 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
 	current->flags &= ~PF_MEMALLOC;
 	psi_memstall_leave(&pflags);
 
-	trace_mm_vmscan_memcg_reclaim_end(nr_reclaimed);
+	//trace_mm_vmscan_memcg_reclaim_end(nr_reclaimed);
 
 	return nr_reclaimed;
 }
@@ -3514,7 +3514,7 @@ static void kswapd_try_to_sleep(pg_data_t *pgdat, int alloc_order, int reclaim_o
 	 */
 	if (!remaining &&
 	    prepare_kswapd_sleep(pgdat, reclaim_order, classzone_idx)) {
-		trace_mm_vmscan_kswapd_sleep(pgdat->node_id);
+		//trace_mm_vmscan_kswapd_sleep(pgdat->node_id);
 
 		/*
 		 * vmstat counters are not perfectly accurate and the estimated
@@ -3623,8 +3623,8 @@ kswapd_try_sleep:
 		 * but kcompactd is woken to compact for the original
 		 * request (alloc_order).
 		 */
-		trace_mm_vmscan_kswapd_wake(pgdat->node_id, classzone_idx,
-						alloc_order);
+		//trace_mm_vmscan_kswapd_wake(pgdat->node_id, classzone_idx,
+		//				alloc_order);
 		mm_event_start(&event_ts);
 		reclaim_order = balance_pgdat(pgdat, alloc_order, classzone_idx);
 		mm_event_end(MM_RECLAIM, event_ts);
@@ -3665,7 +3665,7 @@ void wakeup_kswapd(struct zone *zone, int order, enum zone_type classzone_idx)
 	if (pgdat_balanced(pgdat, order, classzone_idx))
 		return;
 
-	trace_mm_vmscan_wakeup_kswapd(pgdat->node_id, classzone_idx, order);
+	//trace_mm_vmscan_wakeup_kswapd(pgdat->node_id, classzone_idx, order);
 	wake_up_interruptible(&pgdat->kswapd_wait);
 }
 

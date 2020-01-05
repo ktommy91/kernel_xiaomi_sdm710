@@ -596,8 +596,8 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
 	if (likely(writable)) {
 		if (likely(referenced)) {
 			result = SCAN_SUCCEED;
-			trace_mm_collapse_huge_page_isolate(page, none_or_zero,
-							    referenced, writable, result);
+			//trace_mm_collapse_huge_page_isolate(page, none_or_zero,
+			//				    referenced, writable, result);
 			return 1;
 		}
 	} else {
@@ -606,8 +606,8 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
 
 out:
 	release_pte_pages(pte, _pte);
-	trace_mm_collapse_huge_page_isolate(page, none_or_zero,
-					    referenced, writable, result);
+	//trace_mm_collapse_huge_page_isolate(page, none_or_zero,
+	//				    referenced, writable, result);
 	return 0;
 }
 
@@ -893,7 +893,7 @@ static bool __collapse_huge_page_swapin(struct mm_struct *mm,
 
 	/* we only decide to swapin, if there is enough young ptes */
 	if (referenced < HPAGE_PMD_NR/2) {
-		trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+		//trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
 		return false;
 	}
 	fe.pte = pte_offset_map(pmd, address);
@@ -910,7 +910,7 @@ static bool __collapse_huge_page_swapin(struct mm_struct *mm,
 			down_read(&mm->mmap_sem);
 			if (hugepage_vma_revalidate(mm, address, &fe.vma)) {
 				/* vma is no longer available, don't continue to swapin */
-				trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+				//trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
 				return false;
 			}
 			/* check if the pmd is still valid */
@@ -918,7 +918,7 @@ static bool __collapse_huge_page_swapin(struct mm_struct *mm,
 				return false;
 		}
 		if (ret & VM_FAULT_ERROR) {
-			trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+			//trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
 			return false;
 		}
 		/* pte is unmapped now, we need to map it */
@@ -926,7 +926,7 @@ static bool __collapse_huge_page_swapin(struct mm_struct *mm,
 	}
 	fe.pte--;
 	pte_unmap(fe.pte);
-	trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 1);
+	//trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 1);
 	return true;
 }
 
@@ -1096,7 +1096,7 @@ static void collapse_huge_page(struct mm_struct *mm,
 out_up_write:
 	up_write(&mm->mmap_sem);
 out_nolock:
-	trace_mm_collapse_huge_page(mm, isolated, result);
+	//trace_mm_collapse_huge_page(mm, isolated, result);
 	return;
 out:
 	mem_cgroup_cancel_charge(new_page, memcg, true);
@@ -1223,7 +1223,7 @@ out_unmap:
 		collapse_huge_page(mm, address, hpage, node, referenced);
 	}
 out:
-	trace_mm_khugepaged_scan_pmd(mm, page, writable, referenced,
+	//trace_mm_khugepaged_scan_pmd(mm, page, writable, referenced,
 				     none_or_zero, result, unmapped);
 	return ret;
 }

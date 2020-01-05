@@ -882,7 +882,7 @@ int bdi_register(struct backing_dev_info *bdi, struct device *parent,
 	list_add_tail_rcu(&bdi->bdi_list, &bdi_list);
 	spin_unlock_bh(&bdi_lock);
 
-	trace_writeback_bdi_register(bdi);
+	//trace_writeback_bdi_register(bdi);
 	return 0;
 }
 EXPORT_SYMBOL(bdi_register);
@@ -1043,8 +1043,8 @@ long congestion_wait(int sync, long timeout)
 	ret = io_schedule_timeout(timeout);
 	finish_wait(wqh, &wait);
 
-	trace_writeback_congestion_wait(jiffies_to_usecs(timeout),
-					jiffies_to_usecs(jiffies - start));
+	//trace_writeback_congestion_wait(jiffies_to_usecs(timeout),
+	//				jiffies_to_usecs(jiffies - start));
 
 	return ret;
 }
@@ -1098,8 +1098,8 @@ long wait_iff_congested(struct pglist_data *pgdat, int sync, long timeout)
 	finish_wait(wqh, &wait);
 
 out:
-	trace_writeback_wait_iff_congested(jiffies_to_usecs(timeout),
-					jiffies_to_usecs(jiffies - start));
+	//trace_writeback_wait_iff_congested(jiffies_to_usecs(timeout),
+	//				jiffies_to_usecs(jiffies - start));
 
 	return ret;
 }

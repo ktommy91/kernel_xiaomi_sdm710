@@ -275,7 +275,7 @@ int test_pages_isolated(unsigned long start_pfn, unsigned long end_pfn,
 						skip_hwpoisoned_pages);
 	spin_unlock_irqrestore(&zone->lock, flags);
 
-	trace_test_pages_isolated(start_pfn, end_pfn, pfn);
+	//trace_test_pages_isolated(start_pfn, end_pfn, pfn);
 
 	return pfn < end_pfn ? -EBUSY : 0;
 }
