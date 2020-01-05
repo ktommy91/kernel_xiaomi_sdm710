@@ -68,7 +68,7 @@ static void record_vmstat(void)
 		vmstat.compact_scan += this->event[COMPACTFREE_SCANNED] +
 					this->event[COMPACTMIGRATE_SCANNED];
 	}
-	trace_mm_event_vmstat_record(&vmstat);
+	//trace_mm_event_vmstat_record(&vmstat);
 }
 
 static void record_stat(void)
@@ -88,7 +88,7 @@ static void record_stat(void)
 			continue;
 		if (i == MM_COMPACTION || i == MM_RECLAIM)
 			need_vmstat = true;
-		trace_mm_event_record(i, &current->mm_event[i]);
+		//trace_mm_event_record(i, &current->mm_event[i]);
 		memset(&current->mm_event[i], 0,
 				sizeof(struct mm_event_task));
 	}
