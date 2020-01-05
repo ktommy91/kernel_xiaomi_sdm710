@@ -132,7 +132,7 @@ static struct cpuhp_step *cpuhp_get_step(enum cpuhp_state state)
 static int cpuhp_invoke_callback(unsigned int cpu, enum cpuhp_state state,
 				 bool bringup, struct hlist_node *node)
 {
-	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
+	//struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
 	struct cpuhp_step *step = cpuhp_get_step(state);
 	int (*cbm)(unsigned int cpu, struct hlist_node *node);
 	int (*cb)(unsigned int cpu);
@@ -142,9 +142,9 @@ static int cpuhp_invoke_callback(unsigned int cpu, enum cpuhp_state state,
 		cb = bringup ? step->startup.single : step->teardown.single;
 		if (!cb)
 			return 0;
-		trace_cpuhp_enter(cpu, st->target, state, cb);
+		//trace_cpuhp_enter(cpu, st->target, state, cb);
 		ret = cb(cpu);
-		trace_cpuhp_exit(cpu, st->state, state, ret);
+		//trace_cpuhp_exit(cpu, st->state, state, ret);
 		return ret;
 	}
 	cbm = bringup ? step->startup.multi : step->teardown.multi;
@@ -153,18 +153,18 @@ static int cpuhp_invoke_callback(unsigned int cpu, enum cpuhp_state state,
 
 	/* Single invocation for instance add/remove */
 	if (node) {
-		trace_cpuhp_multi_enter(cpu, st->target, state, cbm, node);
+		//trace_cpuhp_multi_enter(cpu, st->target, state, cbm, node);
 		ret = cbm(cpu, node);
-		trace_cpuhp_exit(cpu, st->state, state, ret);
+		//trace_cpuhp_exit(cpu, st->state, state, ret);
 		return ret;
 	}
 
 	/* State transition. Invoke on all instances */
 	cnt = 0;
 	hlist_for_each(node, &step->list) {
-		trace_cpuhp_multi_enter(cpu, st->target, state, cbm, node);
+		//trace_cpuhp_multi_enter(cpu, st->target, state, cbm, node);
 		ret = cbm(cpu, node);
-		trace_cpuhp_exit(cpu, st->state, state, ret);
+		//trace_cpuhp_exit(cpu, st->state, state, ret);
 		if (ret)
 			goto err;
 		cnt++;
@@ -782,14 +782,14 @@ static void __cpuhp_kick_ap_work(struct cpuhp_cpu_state *st)
 static int cpuhp_kick_ap_work(unsigned int cpu)
 {
 	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
-	enum cpuhp_state state = st->state;
+	//enum cpuhp_state state = st->state;
 
-	trace_cpuhp_enter(cpu, st->target, state, cpuhp_kick_ap_work);
+	//trace_cpuhp_enter(cpu, st->target, state, cpuhp_kick_ap_work);
 	lock_map_acquire(&cpuhp_state_lock_map);
 	lock_map_release(&cpuhp_state_lock_map);
 	__cpuhp_kick_ap_work(st);
 	wait_for_completion(&st->done);
-	trace_cpuhp_exit(cpu, st->state, state, st->result);
+	//trace_cpuhp_exit(cpu, st->state, state, st->result);
 	return st->result;
 }
 
@@ -1077,7 +1077,7 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen,
 
 	hasdied = prev_state != st->state && st->state == CPUHP_OFFLINE;
 out:
-	trace_cpuhp_latency(cpu, 0, start_time, ret);
+	//trace_cpuhp_latency(cpu, 0, start_time, ret);
 	cpu_hotplug_done();
 	/* This post dead nonsense must die */
 	if (!ret && hasdied)
@@ -1216,7 +1216,7 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
 	target = min((int)target, CPUHP_BRINGUP_CPU);
 	ret = cpuhp_up_callbacks(cpu, st, target);
 out:
-	trace_cpuhp_latency(cpu, 1, start_time, ret);
+	//trace_cpuhp_latency(cpu, 1, start_time, ret);
 	cpu_hotplug_done();
 	arch_smt_update();
 	return ret;
@@ -1324,9 +1324,9 @@ int freeze_secondary_cpus(int primary)
 	for_each_online_cpu(cpu) {
 		if (cpu == primary)
 			continue;
-		trace_suspend_resume(TPS("CPU_OFF"), cpu, true);
+		//trace_suspend_resume(TPS("CPU_OFF"), cpu, true);
 		error = _cpu_down(cpu, 1, CPUHP_OFFLINE);
-		trace_suspend_resume(TPS("CPU_OFF"), cpu, false);
+		//trace_suspend_resume(TPS("CPU_OFF"), cpu, false);
 		if (!error)
 			cpumask_set_cpu(cpu, frozen_cpus);
 		else {
@@ -1375,9 +1375,9 @@ void enable_nonboot_cpus(void)
 	arch_enable_nonboot_cpus_begin();
 
 	for_each_cpu(cpu, frozen_cpus) {
-		trace_suspend_resume(TPS("CPU_ON"), cpu, true);
+		//trace_suspend_resume(TPS("CPU_ON"), cpu, true);
 		error = _cpu_up(cpu, 1, CPUHP_ONLINE);
-		trace_suspend_resume(TPS("CPU_ON"), cpu, false);
+		//trace_suspend_resume(TPS("CPU_ON"), cpu, false);
 		if (!error) {
 			pr_info("CPU%d is up\n", cpu);
 			cpu_device = get_cpu_device(cpu);
