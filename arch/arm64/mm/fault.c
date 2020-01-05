@@ -228,7 +228,7 @@ static void __do_user_fault(struct task_struct *tsk, unsigned long addr,
 	struct siginfo si;
 	const struct fault_info *inf;
 
-	trace_user_fault(tsk, addr, esr);
+	//trace_user_fault(tsk, addr, esr);
 
 	if (unhandled_signal(tsk, sig) && show_unhandled_signals_ratelimited()) {
 		inf = esr_to_fault_info(esr);
@@ -761,8 +761,8 @@ asmlinkage int __exception do_debug_exception(unsigned long addr_if_watchpoint,
 	 * Tell lockdep we disabled irqs in entry.S. Do nothing if they were
 	 * already disabled to preserve the last enabled/disabled addresses.
 	 */
-	if (interrupts_enabled(regs))
-		trace_hardirqs_off();
+	//if (interrupts_enabled(regs))
+	//	trace_hardirqs_off();
 
 	if (user_mode(regs) && pc > TASK_SIZE)
 		arm64_apply_bp_hardening();
@@ -781,8 +781,8 @@ asmlinkage int __exception do_debug_exception(unsigned long addr_if_watchpoint,
 		rv = 0;
 	}
 
-	if (interrupts_enabled(regs))
-		trace_hardirqs_on();
+	//if (interrupts_enabled(regs))
+	//	trace_hardirqs_on();
 
 	return rv;
 }

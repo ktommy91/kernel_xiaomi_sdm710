@@ -900,7 +900,7 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
 	 * informed the tracing code of that for efficiency reasons.
 	 * Update the trace code with the current status.
 	 */
-	trace_hardirqs_off();
+	//trace_hardirqs_off();
 
 	do {
 		/* Check valid user FS if needed */
