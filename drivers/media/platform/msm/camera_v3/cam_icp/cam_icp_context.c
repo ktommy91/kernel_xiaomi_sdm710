@@ -84,7 +84,7 @@ static int __cam_icp_acquire_dev_in_available(struct cam_context *ctx,
 	rc = cam_context_acquire_dev_to_hw(ctx, cmd);
 	if (!rc) {
 		ctx->state = CAM_CTX_ACQUIRED;
-		trace_cam_context_state("ICP", ctx);
+		//trace_cam_context_state("ICP", ctx);
 	}
 
 	return rc;
@@ -100,7 +100,7 @@ static int __cam_icp_release_dev_in_acquired(struct cam_context *ctx,
 		CAM_ERR(CAM_ICP, "Unable to release device");
 
 	ctx->state = CAM_CTX_AVAILABLE;
-	trace_cam_context_state("ICP", ctx);
+	//trace_cam_context_state("ICP", ctx);
 	return rc;
 }
 
@@ -112,7 +112,7 @@ static int __cam_icp_start_dev_in_acquired(struct cam_context *ctx,
 	rc = cam_context_start_dev_to_hw(ctx, cmd);
 	if (!rc) {
 		ctx->state = CAM_CTX_READY;
-		trace_cam_context_state("ICP", ctx);
+		//trace_cam_context_state("ICP", ctx);
 	}
 
 	return rc;
@@ -180,7 +180,7 @@ static int __cam_icp_stop_dev_in_ready(struct cam_context *ctx,
 		CAM_ERR(CAM_ICP, "Failed to stop device");
 
 	ctx->state = CAM_CTX_ACQUIRED;
-	trace_cam_context_state("ICP", ctx);
+	//trace_cam_context_state("ICP", ctx);
 	return rc;
 }
 

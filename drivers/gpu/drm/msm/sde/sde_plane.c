@@ -368,9 +368,9 @@ static void _sde_plane_set_qos_lut(struct drm_plane *plane,
 
 	psde->pipe_qos_cfg.creq_lut = qos_lut;
 
-	trace_sde_perf_set_qos_luts(psde->pipe - SSPP_VIG0,
-			(fmt) ? fmt->base.pixel_format : 0,
-			psde->is_rt_pipe, total_fl, qos_lut, lut_usage);
+	//trace_sde_perf_set_qos_luts(psde->pipe - SSPP_VIG0,
+	//		(fmt) ? fmt->base.pixel_format : 0,
+	//		psde->is_rt_pipe, total_fl, qos_lut, lut_usage);
 
 	SDE_DEBUG("plane%u: pnum:%d fmt: %4.4s rt:%d fl:%u lut:0x%llx\n",
 			plane->base.id,
@@ -437,11 +437,11 @@ static void _sde_plane_set_danger_lut(struct drm_plane *plane,
 	psde->pipe_qos_cfg.danger_lut = danger_lut;
 	psde->pipe_qos_cfg.safe_lut = safe_lut;
 
-	trace_sde_perf_set_danger_luts(psde->pipe - SSPP_VIG0,
-			(fmt) ? fmt->base.pixel_format : 0,
-			(fmt) ? fmt->fetch_mode : 0,
-			psde->pipe_qos_cfg.danger_lut,
-			psde->pipe_qos_cfg.safe_lut);
+	//trace_sde_perf_set_danger_luts(psde->pipe - SSPP_VIG0,
+	//		(fmt) ? fmt->base.pixel_format : 0,
+	//		(fmt) ? fmt->fetch_mode : 0,
+	//		psde->pipe_qos_cfg.danger_lut,
+	//		psde->pipe_qos_cfg.safe_lut);
 
 	SDE_DEBUG("plane%u: pnum:%d fmt:%4.4s mode:%d fl:%d luts[0x%x,0x%x]\n",
 		plane->base.id,

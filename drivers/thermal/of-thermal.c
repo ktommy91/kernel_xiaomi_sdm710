@@ -183,8 +183,8 @@ static int virt_sensor_read_temp(void *data, int *val)
 		default:
 			break;
 		}
-		trace_virtual_temperature(sens->virt_tz, sens->tz[idx],
-					sens_temp, temp);
+		//trace_virtual_temperature(sens->virt_tz, sens->tz[idx],
+		//			sens_temp, temp);
 	}
 
 	sens->last_reading = *val = temp;

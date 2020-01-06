@@ -67,7 +67,7 @@ int cam_context_buf_done_from_hw(struct cam_context *ctx,
 	req = list_first_entry(&ctx->active_req_list,
 		struct cam_ctx_request, list);
 
-	trace_cam_buf_done("UTILS", ctx, req);
+	//trace_cam_buf_done("UTILS", ctx, req);
 
 	if (done->request_id != req->request_id) {
 		CAM_ERR(CAM_CTXT,

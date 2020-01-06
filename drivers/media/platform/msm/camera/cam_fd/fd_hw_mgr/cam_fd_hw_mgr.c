@@ -837,7 +837,7 @@ static int cam_fd_mgr_util_submit_frame(void *priv, void *data)
 		return -EBUSY;
 	}
 
-	trace_cam_submit_to_hw("FD", frame_req->request_id);
+	//trace_cam_submit_to_hw("FD", frame_req->request_id);
 
 	list_del_init(&frame_req->list);
 	mutex_unlock(&hw_mgr->frame_req_mutex);
@@ -1001,7 +1001,7 @@ static int32_t cam_fd_mgr_workq_irq_cb(void *priv, void *data)
 		frame_abort = false;
 	}
 
-	trace_cam_irq_handled("FD", irq_type);
+	//trace_cam_irq_handled("FD", irq_type);
 
 notify_context:
 	/* Do a callback to inform frame done or stop done */
@@ -1665,7 +1665,7 @@ static int cam_fd_mgr_hw_config(void *hw_mgr_priv, void *hw_config_args)
 
 	frame_req = config->priv;
 
-	trace_cam_apply_req("FD", frame_req->request_id);
+	//trace_cam_apply_req("FD", frame_req->request_id);
 	CAM_DBG(CAM_FD, "FrameHWConfig : Frame[%lld]", frame_req->request_id);
 
 	frame_req->num_hw_update_entries = config->num_hw_update_entries;

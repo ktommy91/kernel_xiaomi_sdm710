@@ -553,7 +553,7 @@ static int __cam_req_mgr_send_req(struct cam_req_mgr_core_link *link,
 				if (pd == link->max_delay)
 					link->open_req_cnt--;
 			}
-			trace_cam_req_mgr_apply_request(link, &apply_req, dev);
+			//trace_cam_req_mgr_apply_request(link, &apply_req, dev);
 		}
 	}
 	if (rc < 0) {
@@ -1897,7 +1897,7 @@ int cam_req_mgr_process_flush_req(void *priv, void *data)
 
 	in_q = link->req.in_q;
 
-	trace_cam_flush_req(link, flush_info);
+	//trace_cam_flush_req(link, flush_info);
 
 	mutex_lock(&link->req.lock);
 	if (flush_info->flush_type == CAM_REQ_MGR_FLUSH_TYPE_ALL) {
@@ -2108,7 +2108,7 @@ int cam_req_mgr_process_add_req(void *priv, void *data)
 		idx, add_req->dev_hdl, add_req->req_id, tbl->pd,
 		slot->req_ready_map);
 
-	trace_cam_req_mgr_add_req(link, idx, add_req, tbl, device);
+	//trace_cam_req_mgr_add_req(link, idx, add_req, tbl, device);
 
 	if (slot->req_ready_map == tbl->dev_mask) {
 		CAM_DBG(CAM_REQ,
@@ -2597,7 +2597,7 @@ static int __cam_req_mgr_setup_link_info(struct cam_req_mgr_core_link *link,
 		dev->dev_info.dev_hdl = dev->dev_hdl;
 		rc = dev->ops->get_dev_info(&dev->dev_info);
 
-		trace_cam_req_mgr_connect_device(link, &dev->dev_info);
+		//trace_cam_req_mgr_connect_device(link, &dev->dev_info);
 		if (link_info->version == VERSION_1)
 			CAM_DBG(CAM_CRM,
 				"%x: connected: %s, id %d, delay %d, trigger %x",

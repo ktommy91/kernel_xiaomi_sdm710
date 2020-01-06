@@ -32,7 +32,7 @@ static int __cam_fd_ctx_acquire_dev_in_available(struct cam_context *ctx,
 	}
 
 	ctx->state = CAM_CTX_ACQUIRED;
-	trace_cam_context_state("FD", ctx);
+	//trace_cam_context_state("FD", ctx);
 
 	return rc;
 }
@@ -50,7 +50,7 @@ static int __cam_fd_ctx_release_dev_in_acquired(struct cam_context *ctx,
 	}
 
 	ctx->state = CAM_CTX_AVAILABLE;
-	trace_cam_context_state("FD", ctx);
+	//trace_cam_context_state("FD", ctx);
 
 	return rc;
 }
@@ -81,7 +81,7 @@ static int __cam_fd_ctx_start_dev_in_acquired(struct cam_context *ctx,
 	}
 
 	ctx->state = CAM_CTX_ACTIVATED;
-	trace_cam_context_state("FD", ctx);
+	//trace_cam_context_state("FD", ctx);
 
 	return rc;
 }
@@ -99,7 +99,7 @@ static int __cam_fd_ctx_stop_dev_in_activated(struct cam_context *ctx,
 	}
 
 	ctx->state = CAM_CTX_ACQUIRED;
-	trace_cam_context_state("FD", ctx);
+	//trace_cam_context_state("FD", ctx);
 
 	return rc;
 }

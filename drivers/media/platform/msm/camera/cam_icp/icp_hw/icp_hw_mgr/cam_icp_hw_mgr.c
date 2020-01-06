@@ -1692,7 +1692,7 @@ static void cam_icp_mgr_process_dbg_buf(void)
 		if (pkt_ptr[ICP_PACKET_TYPE] == HFI_MSG_SYS_DEBUG) {
 			dbg_msg = (struct hfi_msg_debug *)pkt_ptr;
 			dbg_buf = (char *)&dbg_msg->msg_data;
-			trace_cam_icp_fw_dbg(dbg_buf);
+			//trace_cam_icp_fw_dbg(dbg_buf);
 		}
 		size_processed += (pkt_ptr[ICP_PACKET_SIZE] >>
 			BYTE_WORD_SHIFT);
