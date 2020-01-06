@@ -272,8 +272,8 @@ void sde_vbif_set_ot_limit(struct sde_kms *sde_kms,
 	if (ot_lim == 0)
 		goto exit;
 
-	trace_sde_perf_set_ot(params->num, params->xin_id, ot_lim,
-		params->vbif_idx);
+	//trace_sde_perf_set_ot(params->num, params->xin_id, ot_lim,
+	//	params->vbif_idx);
 
 	forced_on = mdp->ops.setup_clk_force_ctrl(mdp, params->clk_ctrl, true);
 

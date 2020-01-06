@@ -463,7 +463,7 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
 	if (trip_temp <= 0 || tz->temperature < trip_temp)
 		return;
 
-	trace_thermal_zone_trip(tz, trip, trip_type, true);
+	//trace_thermal_zone_trip(tz, trip, trip_type, true);
 
 	if (tz->ops->notify)
 		tz->ops->notify(tz, trip, trip_type);
@@ -495,7 +495,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
 	 * So, start monitoring again.
 	 */
 	monitor_thermal_zone(tz);
-	trace_thermal_handle_trip(tz, trip);
+	//trace_thermal_handle_trip(tz, trip);
 }
 
 /**
@@ -540,7 +540,7 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
 		if (!ret && *temp < crit_temp)
 			*temp = tz->emul_temperature;
 	}
-	trace_thermal_query_temp(tz, *temp);
+	//trace_thermal_query_temp(tz, *temp);
 	mutex_unlock(&tz->lock);
 exit:
 	return ret;
@@ -587,7 +587,7 @@ void thermal_zone_set_trips(struct thermal_zone_device *tz)
 	ret = tz->ops->set_trips(tz, low, high);
 	if (ret)
 		dev_err(&tz->device, "Failed to set trips: %d\n", ret);
-	trace_thermal_set_trip(tz);
+	//trace_thermal_set_trip(tz);
 
 exit:
 	mutex_unlock(&tz->lock);
@@ -601,7 +601,7 @@ static void store_temperature(struct thermal_zone_device *tz, int temp)
 	tz->temperature = temp;
 	mutex_unlock(&tz->lock);
 
-	trace_thermal_temperature(tz);
+	//trace_thermal_temperature(tz);
 	if (tz->last_temperature == THERMAL_TEMP_INVALID ||
 		tz->last_temperature == THERMAL_TEMP_INVALID_LOW)
 		dev_dbg(&tz->device, "last_temperature N/A, current_temperature=%d\n",
@@ -649,7 +649,7 @@ void thermal_zone_device_update_temp(struct thermal_zone_device *tz,
 		!(tz->ops->is_wakeable(tz))))
 		return;
 
-	trace_thermal_device_update(tz, event);
+	//trace_thermal_device_update(tz, event);
 	store_temperature(tz, temp);
 
 	thermal_zone_set_trips(tz);
@@ -673,7 +673,7 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
 	if (!tz->ops->get_temp)
 		return;
 
-	trace_thermal_device_update(tz, event);
+	//trace_thermal_device_update(tz, event);
 	update_temperature(tz);
 
 	thermal_zone_set_trips(tz);
@@ -2013,13 +2013,13 @@ void thermal_cdev_update(struct thermal_cooling_device *cdev)
 				current_target = instance->target;
 		}
 	}
-	trace_cdev_update_start(cdev);
+	//trace_cdev_update_start(cdev);
 	cdev->ops->set_cur_state(cdev, current_target);
 	if (cdev->ops->set_min_state)
 		cdev->ops->set_min_state(cdev, min_target);
 	cdev->updated = true;
 	mutex_unlock(&cdev->lock);
-	trace_cdev_update(cdev, current_target, min_target);
+	//trace_cdev_update(cdev, current_target, min_target);
 	dev_dbg(&cdev->device, "set to state %lu min state %lu\n",
 				current_target, min_target);
 }

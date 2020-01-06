@@ -1131,7 +1131,7 @@ static int __set_clocks(struct venus_hfi_device *device, u32 freq)
 				return rc;
 			}
 
-			trace_msm_vidc_perf_clock_scale(cl->name, freq);
+			//trace_msm_vidc_perf_clock_scale(cl->name, freq);
 			dprintk(VIDC_PROF, "Scaling clock %s to %u\n",
 					cl->name, freq);
 		}
@@ -3806,9 +3806,9 @@ static int __protect_cp_mem(struct venus_hfi_device *device)
 				rc, resp);
 	}
 
-	trace_venus_hfi_var_done(
-		memprot.cp_start, memprot.cp_size,
-		memprot.cp_nonpixel_start, memprot.cp_nonpixel_size);
+	//trace_venus_hfi_var_done(
+	//	memprot.cp_start, memprot.cp_size,
+	//	memprot.cp_nonpixel_start, memprot.cp_nonpixel_size);
 	return rc;
 }
 
@@ -4284,7 +4284,7 @@ static int __load_fw(struct venus_hfi_device *device)
 		dprintk(VIDC_ERR, "Failed to initialize packetization\n");
 		goto fail_init_pkt;
 	}
-	trace_msm_v4l2_vidc_fw_load_start("msm_v4l2_vidc venus_fw load start");
+	//trace_msm_v4l2_vidc_fw_load_start("msm_v4l2_vidc venus_fw load start");
 
 	rc = __venus_power_on(device);
 	if (rc) {
@@ -4314,7 +4314,7 @@ static int __load_fw(struct venus_hfi_device *device)
 			goto fail_protect_mem;
 		}
 	}
-	trace_msm_v4l2_vidc_fw_load_end("msm_v4l2_vidc venus_fw load end");
+	//trace_msm_v4l2_vidc_fw_load_end("msm_v4l2_vidc venus_fw load end");
 	return rc;
 fail_protect_mem:
 	if (device->resources.fw.cookie)
@@ -4326,7 +4326,7 @@ fail_venus_power_on:
 fail_init_pkt:
 	__deinit_resources(device);
 fail_init_res:
-	trace_msm_v4l2_vidc_fw_load_end("msm_v4l2_vidc venus_fw load end");
+	//trace_msm_v4l2_vidc_fw_load_end("msm_v4l2_vidc venus_fw load end");
 	return rc;
 }
 

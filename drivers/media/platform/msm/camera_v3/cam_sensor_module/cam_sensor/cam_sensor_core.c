@@ -1288,7 +1288,7 @@ int32_t cam_sensor_apply_request(struct cam_req_mgr_apply_request *apply)
 		return -EINVAL;
 	}
 	CAM_DBG(CAM_REQ, " Sensor update req id: %lld", apply->request_id);
-	trace_cam_apply_req("Sensor", apply->request_id);
+	//trace_cam_apply_req("Sensor", apply->request_id);
 	mutex_lock(&(s_ctrl->cam_sensor_mutex));
 	rc = cam_sensor_apply_settings(s_ctrl, apply->request_id,
 		CAM_SENSOR_PACKET_OPCODE_SENSOR_UPDATE);
