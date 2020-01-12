@@ -128,8 +128,7 @@ ifeq ($(CONFIG_MACH_XIAOMI_SDM710),y)
 		grus-sdm712-overlay.dtbo
 
 	dtbo-$(CONFIG_MACH_XIAOMI_F3B) += \
-		pyxis_overlay1.dtbo \
-		pyxis_overlay2.dtbo
+		pyxis-sdm710-overlay.dtbo
 
 	dtbo-$(CONFIG_MACH_XIAOMI_F3M) += \
 		vela-sdm710-overlay.dtbo
@@ -138,8 +137,7 @@ sirius-sdm710-overlay.dtbo-base := sdm710.dtb
 sirius-sdm670-overlay.dtbo-base := sdm670.dtb
 grus-sdm710-overlay.dtbo-base := sdm710.dtb
 grus-sdm712-overlay.dtbo-base := sdm710.dtb
-pyxis_overlay1.dtbo-base := decomp_sdm710.dtb
-pyxis_overlay2.dtbo-base := decomp_sdm710.dtb
+pyxis-sdm710-overlay.dtbo-base := sdm710.dtb
 vela-sdm710-overlay.dtbo-base := sdm710.dtb
 
 else
@@ -284,7 +282,7 @@ dtb-$(CONFIG_MACH_XIAOMI_F2) += \
 	grus-sdm712.dtb
 
 dtb-$(CONFIG_MACH_XIAOMI_F3B) += \
-		decomp_sdm710.dtb
+	pyxis-sdm710.dtb
 
 dtb-$(CONFIG_MACH_XIAOMI_F3M) += \
 	vela-sdm710.dtb
