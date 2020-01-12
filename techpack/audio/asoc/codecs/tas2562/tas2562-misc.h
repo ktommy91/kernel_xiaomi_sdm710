@@ -1,23 +1,24 @@
 /*
-** =============================================================================
-** Copyright (c) 2016  Texas Instruments Inc.
-**
-** This program is free software; you can redistribute it and/or modify it under
-** the terms of the GNU General Public License as published by the Free Software
-** Foundation; version 2.
-**
-** This program is distributed in the hope that it will be useful, but WITHOUT
-** ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-** FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-**
-** File:
-**     tas2562-misc.h
-**
-** Description:
-**     header file for tas2562-misc.c
-**
-** =============================================================================
-*/
+ * =============================================================================
+ * Copyright (c) 2016  Texas Instruments Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ *
+ * File:
+ *     tas2562-misc.h
+ *
+ * Description:
+ *     header file for tas2562-misc.c
+ *
+ * =============================================================================
+ */
 
 #ifndef _TAS2562_MISC_H
 #define _TAS2562_MISC_H
@@ -31,7 +32,7 @@
 #define	TIAUDIO_CMD_DACVOLUME			10
 #define	TIAUDIO_CMD_SPEAKER				11
 
-int tas2562_register_misc(struct tas2562_priv *pTAS2562);
-int tas2562_deregister_misc(struct tas2562_priv *pTAS2562);
+int tas2562_register_misc(struct tas2562_priv *p_tas2562);
+int tas2562_deregister_misc(struct tas2562_priv *p_tas2562);
 
 #endif /* _TAS2562_MISC_H */
