@@ -313,8 +313,6 @@
 		ti,right-slot = <1>; /* <right slot number> */
 		ti,imon-slot-no = <0>; /* <current sense slot number> */
 		ti,vmon-slot-no = <2>; /* <current voltage slot number> */
-		ti,iv-width = <16>; /* IV sense by default is set to 16 bit, in case of power Limiter it should be 12*/
-		ti,vbat-mon = <0>; /* By default Vbat should be 0, in case os power limiter it should be 1*/
 		status = "ok";
 	};
 };
