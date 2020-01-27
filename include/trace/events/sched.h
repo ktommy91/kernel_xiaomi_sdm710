@@ -525,6 +525,7 @@ TRACE_EVENT(sched_migration_update_sum,
 		__entry->src_nt_cs, __entry->src_nt_ps, __entry->dst_nt_cs, __entry->dst_nt_ps)
 );
 
+#ifndef CONFIG_SCHED_WALT
 TRACE_EVENT(sched_set_boost,
 
 	TP_PROTO(int type),
@@ -541,6 +542,7 @@ TRACE_EVENT(sched_set_boost,
 
 	TP_printk("type %d", __entry->type)
 );
+#endif /*CONFIG_SCHED_WALT*/
 
 #endif
 

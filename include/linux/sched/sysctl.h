@@ -43,6 +43,10 @@ walt_proc_update_handler(struct ctl_table *table, int write,
 			 void __user *buffer, size_t *lenp,
 			 loff_t *ppos);
 
+#else
+extern unsigned int sysctl_sched_boost;
+extern unsigned int sysctl_sched_min_task_util_for_boost;
+extern unsigned int sysctl_sched_min_task_util_for_colocation;
 #endif /* CONFIG_SCHED_WALT */
 
 #if defined(CONFIG_PREEMPT_TRACER) || defined(CONFIG_IRQSOFF_TRACER)
