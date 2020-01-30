@@ -244,6 +244,10 @@
 	qcom,platform-reset-gpio = <&tlmm 75 0>;
 };
 
+&mdss_dsi_phy0 {
+	qcom,panel-allow-phy-poweroff;
+};
+
 &reserved_memory {
 	secure_dsp_mem: secure_dsp_region {
 		compatible = "removed-dma-pool";
